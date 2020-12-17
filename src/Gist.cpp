@@ -37,6 +37,82 @@ Gist<T>::Gist (int audioFrameSize, int fs, WindowType windowType_)
     setAudioFrameSize (audioFrameSize);
 }
 
+template<class T>
+Gist<T>::Gist(Gist&& other) noexcept
+  : onsetDetectionFunction{std::move(other.onsetDetectionFunction)}
+  , yin{std::move(other.yin)}
+  , mfcc{std::move(other.mfcc)}
+{
+#ifdef USE_FFTW
+    p = other.p;
+    other.p = nullptr;
+    fftIn = other.fftIn;
+    other.fftIn = nullptr;
+    fftOut = other.fftOut;
+    other.fftOut = nullptr;
+#endif
+
+#ifdef USE_KISS_FFT
+    cfg = other.cfg;
+    fftIn = other.fftIn;
+    other.fftIn = nullptr;
+    fftOut = other.fftOut;
+    other.fftOut = nullptr;
+#endif
+
+    frameSize = other.frameSize;
+    samplingFrequency = other.samplingFrequency;
+    windowType = other.windowType;
+
+    audioFrame = std::move(other.audioFrame);
+    windowFunction = std::move(other.windowFunction);
+    fftReal = std::move(other.fftReal);
+    fftImag = std::move(other.fftImag);
+    magnitudeSpectrum = std::move(other.magnitudeSpectrum);
+
+    fftConfigured = other.fftConfigured;
+    other.fftConfigured = false;
+}
+
+template<class T>
+Gist<T>& Gist<T>::operator=(Gist&& other) noexcept
+{
+#ifdef USE_FFTW
+    p = other.p;
+    other.p = nullptr;
+    fftIn = other.fftIn;
+    other.fftIn = nullptr;
+    fftOut = other.fftOut;
+    other.fftOut = nullptr;
+#endif
+
+#ifdef USE_KISS_FFT
+    cfg = other.cfg;
+    fftIn = other.fftIn;
+    other.fftIn = nullptr;
+    fftOut = other.fftOut;
+    other.fftOut = nullptr;
+#endif
+
+    frameSize = other.frameSize;
+    samplingFrequency = other.samplingFrequency;
+    windowType = other.windowType;
+
+    audioFrame = std::move(other.audioFrame);
+    windowFunction = std::move(other.windowFunction);
+    fftReal = std::move(other.fftReal);
+    fftImag = std::move(other.fftImag);
+    magnitudeSpectrum = std::move(other.magnitudeSpectrum);
+
+    fftConfigured = other.fftConfigured;
+    other.fftConfigured = false;
+
+    onsetDetectionFunction = std::move(other.onsetDetectionFunction);
+    yin = std::move(other.yin);
+    mfcc = std::move(other.mfcc);
+    return *this;
+}
+
 //=======================================================================
 template <class T>
 Gist<T>::~Gist()

@@ -37,7 +37,11 @@ class OnsetDetectionFunction
 public:
     //===========================================================
     /** constructor */
-    OnsetDetectionFunction (int frameSize);
+    explicit OnsetDetectionFunction (int frameSize);
+    OnsetDetectionFunction (const OnsetDetectionFunction&) = delete;
+    OnsetDetectionFunction &operator=(const OnsetDetectionFunction&) = delete;
+    OnsetDetectionFunction (OnsetDetectionFunction&&) = default;
+    OnsetDetectionFunction &operator=(OnsetDetectionFunction&&) = default;
 
     //===========================================================
     /** Sets the frame size of internal buffers. Assumes all magnitude

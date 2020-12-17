@@ -37,14 +37,18 @@ template <class T>
 class MFCC
 {
 public:
-    
+
     //=======================================================================
     /** Constructor */
-    MFCC (int frameSize_, int samplingFrequency_);
+    explicit MFCC (int frameSize_, int samplingFrequency_);
+    MFCC (const MFCC&) = delete;
+    MFCC &operator=(const MFCC&) = delete;
+    MFCC (MFCC&&) = default;
+    MFCC &operator=(MFCC&&) = default;
 
     //=======================================================================
     /** Set the number of coefficients to calculate
-     * @param numCoefficients_ the number of coefficients to calculate 
+     * @param numCoefficients_ the number of coefficients to calculate
      */
     void setNumCoefficients (int numCoefficients_);
 

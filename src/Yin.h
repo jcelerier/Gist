@@ -41,8 +41,12 @@ public:
     /** constructor
      * @param samplingFrequency the sampling frequency
      */
-    Yin (int samplingFrequency);
-    
+    explicit Yin (int samplingFrequency);
+    Yin (const Yin&) = delete;
+    Yin &operator=(const Yin&) = delete;
+    Yin (Yin&&) = default;
+    Yin &operator=(Yin&&) = default;
+
     //===========================================================
     /** sets the sampling frequency used to calculate pitch values
      * @param samplingFrequency the sampling frequency

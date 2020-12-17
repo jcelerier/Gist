@@ -73,6 +73,12 @@ public:
      */
     Gist (int audioFrameSize, int fs, WindowType windowType = HanningWindow);
 
+    /** Copy & move constructors */
+    Gist (const Gist&) = delete;
+    Gist& operator=(const Gist&) = delete;
+    Gist (Gist&& other) noexcept;
+    Gist& operator=(Gist&& other) noexcept;
+
     /** Destructor */
     ~Gist();
 
