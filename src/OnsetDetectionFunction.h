@@ -74,13 +74,13 @@ public:
     T spectralDifferenceHWR (const std::vector<T>& magnitudeSpectrum);
 
     //===========================================================
-    /** calculates the complex spectral difference from the real and imaginary parts 
+    /** calculates the complex spectral difference from the real and imaginary parts
      * of the FFT
      * @param fftReal a vector containing the real part of the FFT
      * @param fftImag a vector containing the imaginary part of the FFT
      * @returns the complex spectral difference onset detection function sample
      */
-    T complexSpectralDifference (const std::vector<T>& fftReal, const std::vector<T>& fftImag);
+    T complexSpectralDifference (const std::vector<T>& fftReal, const std::vector<T>& fftImag, const std::vector<T>& fftMag);
 
     //===========================================================
     /** calculates the high frequency content onset detection function from

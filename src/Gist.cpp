@@ -280,7 +280,7 @@ T Gist<T>::spectralDifferenceHWR()
 template <class T>
 T Gist<T>::complexSpectralDifference()
 {
-    return onsetDetectionFunction.complexSpectralDifference (fftReal, fftImag);
+    return onsetDetectionFunction.complexSpectralDifference (fftReal, fftImag, magnitudeSpectrum);
 }
 
 //=======================================================================

@@ -135,7 +135,7 @@ T OnsetDetectionFunction<T>::spectralDifferenceHWR (const std::vector<T>& magnit
 
 //===========================================================
 template <class T>
-T OnsetDetectionFunction<T>::complexSpectralDifference (const std::vector<T>& fftReal, const std::vector<T>& fftImag)
+T OnsetDetectionFunction<T>::complexSpectralDifference (const std::vector<T>& fftReal, const std::vector<T>& fftImag, const std::vector<T>& magnitudeSpectrum)
 {
     T dev, pdev;
     T sum;
@@ -153,7 +153,7 @@ T OnsetDetectionFunction<T>::complexSpectralDifference (const std::vector<T>& ff
         phaseVal = atan2 (fftImag[i], fftReal[i]);
 
         // calculate magnitude value
-        magVal = sqrt ((fftReal[i] * fftReal[i]) + (fftImag[i] * fftImag[i]));
+        magVal = magnitudeSpectrum[i];
 
         // phase deviation
         dev = phaseVal - (2 * prevPhaseSpectrum_complexSpectralDifference[i]) + prevPhaseSpectrum2_complexSpectralDifference[i];
