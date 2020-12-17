@@ -128,17 +128,17 @@ template <class T>
 void Gist<T>::setAudioFrameSize (int audioFrameSize)
 {
     frameSize = audioFrameSize;
-    
+
     audioFrame.resize (frameSize);
-    
+
     windowFunction = WindowFunctions<T>::createWindow (audioFrameSize, windowType);
-        
-    fftReal.resize (frameSize);
-    fftImag.resize (frameSize);
+
+    fftReal.resize (frameSize / 2);
+    fftImag.resize (frameSize / 2);
     magnitudeSpectrum.resize (frameSize / 2);
-    
+
     configureFFT();
-    
+
     onsetDetectionFunction.setFrameSize (frameSize);
     mfcc.setFrameSize (frameSize);
 }
@@ -321,17 +321,17 @@ void Gist<T>::configureFFT()
     {
         freeFFT();
     }
-    
+
 #ifdef USE_FFTW
     // ------------------------------------------------------
     // initialise the fft time and frequency domain audio frame arrays
-    fftIn = (fftw_complex*)fftw_malloc (sizeof (fftw_complex) * frameSize);  // complex array to hold fft data
+    fftIn = (double*)fftw_malloc (sizeof (double) * frameSize);  // real array to hold fft data
     fftOut = (fftw_complex*)fftw_malloc (sizeof (fftw_complex) * frameSize); // complex array to hold fft data
-    
+
     // FFT plan initialisation
-    p = fftw_plan_dft_1d (frameSize, fftIn, fftOut, FFTW_FORWARD, FFTW_ESTIMATE);
+    p = fftw_plan_dft_r2c_1d (frameSize, fftIn, fftOut, FFTW_MEASURE);
 #endif /* END USE_FFTW */
-    
+
 #ifdef USE_KISS_FFT
     // ------------------------------------------------------
     // initialise the fft time and frequency domain audio frame arrays
@@ -376,15 +376,14 @@ void Gist<T>::performFFT()
     // copy samples from audio frame
     for (int i = 0; i < frameSize; i++)
     {
-        fftIn[i][0] = (double)(audioFrame[i] * windowFunction[i]);
-        fftIn[i][1] = (double)0.0;
+        fftIn[i] = (double)(audioFrame[i] * windowFunction[i]);
     }
     
     // perform the FFT
     fftw_execute (p);
     
     // store real and imaginary parts of FFT
-    for (int i = 0; i < frameSize; i++)
+    for (int i = 0; i < frameSize / 2; i++)
     {
         fftReal[i] = (T)fftOut[i][0];
         fftImag[i] = (T)fftOut[i][1];

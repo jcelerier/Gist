@@ -190,7 +190,7 @@ private:
 
 #ifdef USE_FFTW
     fftw_plan p;          /**< fftw plan */
-    fftw_complex* fftIn;  /**< to hold complex fft values for input */
+    double*       fftIn;  /**< to hold complex fft values for input */
     fftw_complex* fftOut; /**< to hold complex fft values for output */
 #endif
 
