@@ -40,6 +40,11 @@
 
 //=======================================================================
 // fft
+#ifdef USE_OSSIA_FFT
+#include <ossia/audio/fft.hpp>
+#include <memory>
+#endif
+
 #ifdef USE_FFTW
 #include "fftw3.h"
 #endif
@@ -52,7 +57,7 @@
 #include "AccelerateFFT.h"
 #endif
 
-#if !(defined(USE_FFTW) ^ defined(USE_KISS_FFT) ^ defined (USE_ACCELERATE_FFT))
+#if !(defined(USE_OSSIA_FFT) ^ defined(USE_FFTW) ^ defined(USE_KISS_FFT) ^ defined (USE_ACCELERATE_FFT))
 #error "You must define one FFT macro to ensure you select a FFT implementation - either USE_FFTW, USE_KISS_FFT or USE_ACCELERATE_FFT. You have either not defined one of these macros or you have defined more than one of them."
 #endif
 
@@ -64,7 +69,7 @@ template <class T>
 class Gist
 {
 public:
-    
+
     //=======================================================================
     /** Constructor
      * @param audioFrameSize the input audio frame size
@@ -88,15 +93,15 @@ public:
      */
     void setAudioFrameSize (int audioFrameSize);
 
-    /** Set the sampling frequency of input audio 
-     * @param fs the sampling frequency 
+    /** Set the sampling frequency of input audio
+     * @param fs the sampling frequency
      */
     void setSamplingFrequency (int fs);
-    
+
     //=======================================================================
     /** @Returns the audio frame size currently being used */
     int getAudioFrameSize();
-    
+
     /** @Returns the audio sampling frequency being used for analysis */
     int getSamplingFrequency();
 
@@ -137,10 +142,10 @@ public:
 
     /** @Returns the spectral flatness of the magnitude spectrum */
     T spectralFlatness();
-    
+
     /** @Returns the spectral rolloff of the magnitude spectrum */
     T spectralRolloff();
-    
+
     /** @Returns the spectral kurtosis of the magnitude spectrum */
     T spectralKurtosis();
 
@@ -167,13 +172,13 @@ public:
     T pitch();
 
     //=========================== MFCCs =============================
-    
+
     /** Calculates the Mel Frequency Spectrum */
     const std::vector<T>& getMelFrequencySpectrum();
 
     /** Calculates the Mel-frequency Cepstral Coefficients */
     const std::vector<T>& getMelFrequencyCepstralCoefficients();
-    
+
 private:
     //=======================================================================
 
@@ -188,6 +193,10 @@ private:
 
     //=======================================================================
 
+#ifdef USE_OSSIA_FFT
+  std::unique_ptr<ossia::fft> fft;
+#endif
+
 #ifdef USE_FFTW
     fftw_plan p;          /**< fftw plan */
     double*       fftIn;  /**< to hold complex fft values for input */
@@ -199,7 +208,7 @@ private:
     kiss_fft_cpx* fftIn;  /**< FFT input samples, in complex form */
     kiss_fft_cpx* fftOut; /**< FFT output samples, in complex form */
 #endif
-    
+
 #ifdef USE_ACCELERATE_FFT
     AccelerateFFT<T> accelerateFFT;
 #endif
