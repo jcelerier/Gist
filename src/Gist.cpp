@@ -202,6 +202,23 @@ void Gist<T>::processAudioFrame (const T* frame, int numSamples)
 
 //=======================================================================
 template <class T>
+void Gist<T>::processAudioFrame (const T* frame, int numSamples, T gain, T gate)
+{
+  // you are passing an audio frame of a different size to the
+  // audio frame size setup in Gist
+  assert (static_cast<size_t> (numSamples) == audioFrame.size());
+
+  for (size_t i = 0; i < audioFrame.size(); i++)
+  {
+    T res = frame[i] * gain;
+    audioFrame[i] = abs(res) > gate ? res : T{};
+  }
+
+  performFFT();
+}
+
+//=======================================================================
+template <class T>
 const std::vector<T>& Gist<T>::getMagnitudeSpectrum()
 {
     return magnitudeSpectrum;

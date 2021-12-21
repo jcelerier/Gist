@@ -117,6 +117,14 @@ public:
      */
     void processAudioFrame (const T* frame, int numSamples);
 
+    /** Process an audio frame
+     * @param frame a pointer to an array containing the audio frame
+     * @param numSamples the number of samples in the audio frame
+     * @param gain Pre-processing gain
+     * @param gain Pre-processing gate level
+     */
+    void processAudioFrame (const T* frame, int numSamples, T gain, T gate);
+
     /** Gist automatically calculates the magnitude spectrum when processAudioFrame() is called, this function returns it.
      @returns the current magnitude spectrum */
     const std::vector<T>& getMagnitudeSpectrum();
