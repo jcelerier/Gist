@@ -23,4 +23,5 @@ add_library (
 
 source_group (Source src)
 
-target_compile_definitions (Gist PUBLIC -DUSE_KISS_FFT)
+target_compile_definitions (Gist PUBLIC -DUSE_FFTW)
+target_link_libraries(Gist PRIVATE fftw3)
