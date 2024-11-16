@@ -349,7 +349,7 @@ void Gist<T>::configureFFT()
 
     {
       uint32_t fs = frameSize;
-      if(fs < 1)
+      if(fs < 2)
         return;
       if(std::popcount(fs) != 1)
         return;
