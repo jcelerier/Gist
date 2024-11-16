@@ -347,6 +347,14 @@ void Gist<T>::configureFFT()
         freeFFT();
     }
 
+    {
+      uint32_t fs = frameSize;
+      if(fs < 1)
+        return;
+      if(std::popcount(fs) != 1)
+        return;
+    }
+
 #ifdef USE_OSSIA_FFT
     fft = std::make_unique<ossia::fft>(frameSize);
 #endif
@@ -407,6 +415,7 @@ void Gist<T>::performFFT()
 {
 #ifdef USE_OSSIA_FFT
   // copy samples from audio frame
+  if(fft)
   {
     auto fftIn = fft->input();
     for (int i = 0; i < frameSize; i++)
